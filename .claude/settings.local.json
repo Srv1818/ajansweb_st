@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(New-Item *)",
+      "PowerShell(cd \"C:\\\\Users\\\\buyuk\\\\AjansWebsite\"; $env:CI = \"true\"; npx create-strapi@latest strapi2 --no-run --quickstart 2>&1)",
+      "PowerShell(npm view *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\buyuk\\\\AjansWebsite\\\\strapi\" -Recurse -Exclude \"node_modules\" | Where-Object { $_.FullName -notmatch \"node_modules\" } | Select-Object FullName)",
+      "PowerShell(Head *)",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\buyuk\\\\AjansWebsite\\\\strapi\\\\node_modules\" -Directory | Where-Object { $_.Name -match \"sqlite|mysql|better\" } | Select-Object Name)"
+    ]
+  }
+}
