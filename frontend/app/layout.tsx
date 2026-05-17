@@ -1,33 +1,28 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next';
+import { Geist } from 'next/font/google';
+import './globals.css';
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import { getSiteSettings } from '@/lib/directus';
+import type { SiteSettings } from '@/types/directus';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geist = Geist({ subsets: ['latin'], variable: '--font-geist' });
 
 export const metadata: Metadata = {
-  title: "Kurumsal Site",
-  description: "Kurumsal site şablonu",
+  title: { default: 'Kurumsal Site', template: '%s | Kurumsal Site' },
+  description: 'Kurumsal site şablonu',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = (await getSiteSettings().catch(() => null)) as SiteSettings | null;
+
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="tr" className={`${geist.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col">
+        <Header settings={settings} />
+        <div className="flex-1">{children}</div>
+        <Footer settings={settings} />
+      </body>
     </html>
   );
 }
