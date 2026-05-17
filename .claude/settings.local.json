@@ -6,7 +6,13 @@
       "PowerShell(npm view *)",
       "PowerShell(Get-ChildItem \"C:\\\\Users\\\\buyuk\\\\AjansWebsite\\\\strapi\" -Recurse -Exclude \"node_modules\" | Where-Object { $_.FullName -notmatch \"node_modules\" } | Select-Object FullName)",
       "PowerShell(Head *)",
-      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\buyuk\\\\AjansWebsite\\\\strapi\\\\node_modules\" -Directory | Where-Object { $_.Name -match \"sqlite|mysql|better\" } | Select-Object Name)"
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\buyuk\\\\AjansWebsite\\\\strapi\\\\node_modules\" -Directory | Where-Object { $_.Name -match \"sqlite|mysql|better\" } | Select-Object Name)",
+      "Bash(git rm *)",
+      "Bash(git add *)",
+      "Bash(git check-ignore *)",
+      "Bash(git ls-tree *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git push *)"
     ]
   }
 }
