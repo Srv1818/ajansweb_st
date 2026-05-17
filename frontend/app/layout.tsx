@@ -16,9 +16,14 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const settings = (await getSiteSettings().catch(() => null)) as SiteSettings | null;
 
+  const primaryColor = settings?.primary_color ?? '#6366f1';
+
   return (
     <html lang="tr" className={`${geist.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
+      <body
+        className="min-h-full flex flex-col"
+        style={{ '--site-primary': primaryColor } as React.CSSProperties}
+      >
         <Header settings={settings} />
         <div className="flex-1">{children}</div>
         <Footer settings={settings} />

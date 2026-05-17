@@ -6,6 +6,7 @@ import AboutSection from '@/components/sections/AboutSection';
 import TeamSection from '@/components/sections/TeamSection';
 import BlogSection from '@/components/sections/BlogSection';
 import ContactForm from '@/components/sections/ContactForm';
+import SectionHeader from '@/components/common/SectionHeader';
 
 export const revalidate = 60;
 
@@ -25,9 +26,13 @@ export default async function HomePage() {
       <AboutSection settings={settings as SiteSettings | null} />
       <TeamSection members={teamMembers as TeamMember[]} />
       <BlogSection posts={posts as Post[]} />
-      <section className="py-20 px-4 bg-gray-50">
+
+      <section className="py-24 px-4 bg-slate-50">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 mb-10">İletişim</h2>
+          <SectionHeader
+            title="İletişim"
+            subtitle="Projeniz için ücretsiz danışmanlık alın."
+          />
           <ContactForm />
         </div>
       </section>
