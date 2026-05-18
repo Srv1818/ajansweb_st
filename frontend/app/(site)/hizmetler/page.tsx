@@ -1,6 +1,16 @@
 import Link from 'next/link';
+import { icons, Zap } from 'lucide-react';
 import { getServices } from '@/lib/directus';
 import type { Service } from '@/types/directus';
+
+function ServiceIcon({ name }: { name: string }) {
+  const key = name
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join('') as keyof typeof icons;
+  const Icon = icons[key] ?? Zap;
+  return <Icon size={20} strokeWidth={1.75} />;
+}
 
 export const revalidate = 60;
 
@@ -24,7 +34,11 @@ export default async function HizmetlerPage() {
               href={`/hizmetler/${s.slug}`}
               className="block p-6 border rounded-xl hover:shadow-md transition-shadow bg-white"
             >
-              {s.icon && <span className="text-3xl mb-3 block">{s.icon}</span>}
+              {s.icon && (
+                <span className="mb-3 block text-indigo-500">
+                  <ServiceIcon name={s.icon} />
+                </span>
+              )}
               <h2 className="font-semibold text-gray-900">{s.title}</h2>
               {s.short_description && (
                 <p className="mt-2 text-sm text-gray-500 line-clamp-3">{s.short_description}</p>
