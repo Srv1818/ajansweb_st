@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
-import { Menu, X } from 'lucide-react';
+import { Menu } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -24,6 +24,22 @@ const navLinks = [
   { href: '/iletisim', label: 'İletişim' },
 ];
 
+function Logo({ settings }: { settings: SiteSettings | null }) {
+  return settings?.logo ? (
+    <Image
+      src={getAssetUrl(settings.logo)}
+      alt={settings.site_name ?? 'Logo'}
+      width={120}
+      height={40}
+      className="h-9 w-auto object-contain"
+    />
+  ) : (
+    <span className="font-black text-xl tracking-tight text-slate-900">
+      {settings?.site_name ?? 'Ajans'}
+    </span>
+  );
+}
+
 export default function Header({ settings }: { settings: SiteSettings | null }) {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -36,21 +52,6 @@ export default function Header({ settings }: { settings: SiteSettings | null }) 
     return () => window.removeEventListener('scroll', handler);
   }, []);
 
-  const Logo = () =>
-    settings?.logo ? (
-      <Image
-        src={getAssetUrl(settings.logo)}
-        alt={settings.site_name ?? 'Logo'}
-        width={120}
-        height={40}
-        className="h-9 w-auto object-contain"
-      />
-    ) : (
-      <span className="font-black text-xl tracking-tight text-slate-900">
-        {settings?.site_name ?? 'Ajans'}
-      </span>
-    );
-
   return (
     <header
       className={cn(
@@ -62,7 +63,7 @@ export default function Header({ settings }: { settings: SiteSettings | null }) 
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Link href="/" className="shrink-0">
-          <Logo />
+          <Logo settings={settings} />
         </Link>
 
         {/* Desktop nav */}
@@ -104,7 +105,7 @@ export default function Header({ settings }: { settings: SiteSettings | null }) 
             <SheetHeader className="px-6 py-5 border-b border-slate-100">
               <SheetTitle className="text-left">
                 <Link href="/" onClick={() => setOpen(false)} className="inline-block">
-                  <Logo />
+                  <Logo settings={settings} />
                 </Link>
               </SheetTitle>
             </SheetHeader>

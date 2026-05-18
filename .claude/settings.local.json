@@ -24,7 +24,8 @@
       "Bash(node -e \"let d=''; process.stdin.on\\('data',c=>d+=c\\); process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\); const cols=j.data.filter\\(c=>!c.collection.startsWith\\('directus_'\\)\\).map\\(c=>c.collection\\); console.log\\(cols.join\\('\\\\n'\\)\\);}\\)\")",
       "Bash(node -e \"let d=''; process.stdin.on\\('data',c=>d+=c\\); process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\); j.data&&j.data.forEach\\(f=>console.log\\(f.field, '-', f.type\\)\\);}\\)\")",
       "Bash(node -e \"let d=''; process.stdin.on\\('data',c=>d+=c\\); process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\); console.log\\(JSON.stringify\\(j,null,2\\).slice\\(0,600\\)\\);}\\)\")",
-      "Bash(node -e \"let d=''; process.stdin.on\\('data',c=>d+=c\\); process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\); const p=j.data?.[0]; if\\(p\\) console.log\\('slug:', p.slug, '\\\\nhero_heading:', p.hero_heading, '\\\\nstatus:', p.status\\); else console.log\\('NO DATA', JSON.stringify\\(j\\)\\);}\\)\")"
+      "Bash(node -e \"let d=''; process.stdin.on\\('data',c=>d+=c\\); process.stdin.on\\('end',\\(\\)=>{const j=JSON.parse\\(d\\); const p=j.data?.[0]; if\\(p\\) console.log\\('slug:', p.slug, '\\\\nhero_heading:', p.hero_heading, '\\\\nstatus:', p.status\\); else console.log\\('NO DATA', JSON.stringify\\(j\\)\\);}\\)\")",
+      "Bash(npm run *)"
     ]
   }
 }
