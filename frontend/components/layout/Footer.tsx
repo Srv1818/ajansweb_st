@@ -1,15 +1,19 @@
 import Link from 'next/link';
 import { Globe, Mail, Phone, MapPin } from 'lucide-react';
+import { FaInstagram, FaFacebook, FaLinkedin, FaYoutube } from 'react-icons/fa';
+import { FaXTwitter, FaTiktok } from 'react-icons/fa6';
+import type { ComponentType } from 'react';
 import type { SiteSettings } from '@/types/directus';
 
-const platformLabel: Record<string, string> = {
-  instagram: 'IG',
-  twitter: 'TW',
-  x: 'X',
-  linkedin: 'LN',
-  facebook: 'FB',
-  youtube: 'YT',
-  tiktok: 'TK',
+const platformIcons: Record<string, ComponentType<{ className?: string }>> = {
+  instagram: FaInstagram,
+  instgram: FaInstagram, // typo normalization
+  facebook: FaFacebook,
+  x: FaXTwitter,
+  twitter: FaXTwitter,
+  linkedin: FaLinkedin,
+  youtube: FaYoutube,
+  tiktok: FaTiktok,
 };
 
 const navLinks = [
@@ -39,6 +43,8 @@ export default function Footer({ settings }: { settings: SiteSettings | null }) 
             {settings?.social_links && settings.social_links.length > 0 && (
               <div className="flex gap-3">
                 {settings.social_links.map((link) => {
+                  const key = link.platform?.toLowerCase() ?? '';
+                  const Icon = platformIcons[key];
                   return (
                     <a
                       key={link.platform}
@@ -46,9 +52,11 @@ export default function Footer({ settings }: { settings: SiteSettings | null }) 
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={link.platform}
-                      className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200 text-xs font-bold"
+                      className="w-9 h-9 rounded-xl bg-slate-800 hover:bg-indigo-600 border border-slate-700 hover:border-indigo-500 flex items-center justify-center text-slate-400 hover:text-white transition-all duration-200"
                     >
-                      {platformLabel[link.platform?.toLowerCase()] ?? <Globe className="w-3.5 h-3.5" />}
+                      {Icon
+                        ? <Icon className="w-4 h-4" />
+                        : <Globe className="w-4 h-4" />}
                     </a>
                   );
                 })}
