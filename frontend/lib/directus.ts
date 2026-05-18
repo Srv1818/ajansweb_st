@@ -111,3 +111,6 @@ export const getTeamMembers = () =>
   );
 
 export const getSiteSettings = () => getSingleton('site_settings');
+
+export const getTestimonials = () =>
+  getItems('testimonials', { sort: ['sort', 'id'] });

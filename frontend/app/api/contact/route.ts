@@ -7,9 +7,9 @@ const schema = z.object({
   email: z.string().email(),
   phone: z.string().max(20).optional(),
   message: z.string().min(10).max(2000),
+  website: z.string().optional(), // honeypot
 });
 
-// IP başına 3 istek/saat — in-memory, single instance için
 const rateMap = new Map<string, { count: number; resetAt: number }>();
 
 function checkRateLimit(ip: string): boolean {
@@ -46,7 +46,13 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  // Honeypot: bot doldurduysa sessizce 200 dön
+  if (result.data.website) {
+    return NextResponse.json({ ok: true });
+  }
+
   const { name, email, phone, message } = result.data;
+  const sanitizedMessage = message.replace(/<[^>]*>/g, '').trim();
 
   try {
     await resend.emails.send({
@@ -58,7 +64,7 @@ export async function POST(req: NextRequest) {
         <p><strong>E-posta:</strong> ${email}</p>
         ${phone ? `<p><strong>Telefon:</strong> ${phone}</p>` : ''}
         <p><strong>Mesaj:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
+        <p>${sanitizedMessage.replace(/\n/g, '<br>')}</p>
       `,
     });
   } catch {

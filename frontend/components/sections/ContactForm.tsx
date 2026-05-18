@@ -6,23 +6,19 @@ import { z } from 'zod';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
+import type { SiteSettings } from '@/types/directus';
 
 const schema = z.object({
   name: z.string().min(2, 'En az 2 karakter giriniz').max(100),
   email: z.string().email('Geçerli bir e-posta giriniz'),
   phone: z.string().max(20).optional(),
   message: z.string().min(10, 'En az 10 karakter giriniz').max(2000),
+  website: z.string().optional(), // honeypot
 });
 
 type FormValues = z.infer<typeof schema>;
 
-const contactInfo = [
-  { icon: Mail, label: 'E-posta', value: 'info@ajans.com', href: 'mailto:info@ajans.com' },
-  { icon: Phone, label: 'Telefon', value: '+90 212 000 00 00', href: 'tel:+902120000000' },
-  { icon: MapPin, label: 'Adres', value: 'İstanbul, Türkiye', href: null },
-];
-
-export default function ContactForm() {
+export default function ContactForm({ settings }: { settings?: SiteSettings | null }) {
   const {
     register,
     handleSubmit,
@@ -56,42 +52,80 @@ export default function ContactForm() {
     );
   }
 
+  const contactItems = [
+    settings?.contact_email && {
+      icon: Mail,
+      label: 'E-posta',
+      value: settings.contact_email,
+      href: `mailto:${settings.contact_email}`,
+    },
+    settings?.phone && {
+      icon: Phone,
+      label: 'Telefon',
+      value: settings.phone,
+      href: `tel:${settings.phone}`,
+    },
+    settings?.address && {
+      icon: MapPin,
+      label: 'Adres',
+      value: settings.address,
+      href: null,
+    },
+  ].filter(Boolean) as Array<{
+    icon: typeof Mail;
+    label: string;
+    value: string;
+    href: string | null;
+  }>;
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
       {/* Left info panel */}
-      <div className="lg:col-span-2 space-y-8">
-        <div>
-          <h3 className="text-2xl font-bold text-slate-900 mb-2">Bize Ulaşın</h3>
-          <p className="text-slate-500 leading-relaxed">
-            Projeniz için ücretsiz danışmanlık alın. Size 24 saat içinde geri dönüş yapıyoruz.
-          </p>
-        </div>
-        <div className="space-y-4">
-          {contactInfo.map(({ icon: Icon, label, value, href }) => (
-            <div key={label} className="flex items-start gap-4">
-              <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
-                <Icon className="w-4 h-4 text-indigo-600" />
+      {contactItems.length > 0 && (
+        <div className="lg:col-span-2 space-y-8">
+          <div>
+            <h3 className="text-2xl font-bold text-slate-900 mb-2">Bize Ulaşın</h3>
+            <p className="text-slate-500 leading-relaxed">
+              Projeniz için ücretsiz danışmanlık alın. Size 24 saat içinde geri dönüş yapıyoruz.
+            </p>
+          </div>
+          <div className="space-y-4">
+            {contactItems.map(({ icon: Icon, label, value, href }) => (
+              <div key={label} className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
+                  <Icon className="w-4 h-4 text-indigo-600" />
+                </div>
+                <div>
+                  <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">{label}</p>
+                  {href ? (
+                    <a href={href} className="text-sm font-medium text-slate-700 hover:text-indigo-600 transition-colors">
+                      {value}
+                    </a>
+                  ) : (
+                    <p className="text-sm font-medium text-slate-700">{value}</p>
+                  )}
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-slate-400 font-medium uppercase tracking-wide">{label}</p>
-                {href ? (
-                  <a href={href} className="text-sm font-medium text-slate-700 hover:text-indigo-600 transition-colors">
-                    {value}
-                  </a>
-                ) : (
-                  <p className="text-sm font-medium text-slate-700">{value}</p>
-                )}
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Right form */}
+      {/* Form */}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="lg:col-span-3 space-y-5"
+        className={contactItems.length > 0 ? 'lg:col-span-3 space-y-5' : 'lg:col-span-5 space-y-5'}
       >
+        {/* Honeypot — hidden from users */}
+        <input
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="hidden"
+          {...register('website')}
+        />
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-slate-700">

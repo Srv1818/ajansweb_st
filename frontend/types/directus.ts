@@ -23,6 +23,14 @@ export interface SiteSettings {
   footer_text: string;
   social_links: SocialLink[];
   primary_color: string;
+  stat_1_value?: string;
+  stat_1_label?: string;
+  stat_2_value?: string;
+  stat_2_label?: string;
+  stat_3_value?: string;
+  stat_3_label?: string;
+  stat_4_value?: string;
+  stat_4_label?: string;
 }
 
 export interface Page {
@@ -34,6 +42,7 @@ export interface Page {
   hero_cta_text: string;
   hero_cta_link: string;
   hero_background_image: string | null;
+  content?: string;
   seo_title: string;
   seo_description: string;
   status: 'published' | 'draft';
@@ -75,5 +84,15 @@ export interface TeamMember {
   email: string;
   sort: number;
   is_active: boolean;
+  status: 'published' | 'draft';
+}
+
+export interface Testimonial {
+  id: string;
+  name: string;
+  title: string;
+  comment: string;
+  rating: number;
+  sort: number;
   status: 'published' | 'draft';
 }

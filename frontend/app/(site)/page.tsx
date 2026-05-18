@@ -1,30 +1,42 @@
-import { getPage, getServices, getTeamMembers, getPosts, getSiteSettings } from '@/lib/directus';
-import type { Page, Service, TeamMember, Post, SiteSettings } from '@/types/directus';
+import { getPage, getServices, getTeamMembers, getPosts, getSiteSettings, getTestimonials } from '@/lib/directus';
+import type { Page, Service, TeamMember, Post, SiteSettings, Testimonial } from '@/types/directus';
+import { organizationSchema } from '@/lib/structured-data';
 import HeroSection from '@/components/sections/HeroSection';
 import ServicesSection from '@/components/sections/ServicesSection';
 import AboutSection from '@/components/sections/AboutSection';
 import TeamSection from '@/components/sections/TeamSection';
 import BlogSection from '@/components/sections/BlogSection';
+import TestimonialsSection from '@/components/sections/TestimonialsSection';
 import ContactForm from '@/components/sections/ContactForm';
 import SectionHeader from '@/components/common/SectionHeader';
 
 export const revalidate = 60;
 
 export default async function HomePage() {
-  const [homePage, services, teamMembers, posts, settings] = await Promise.all([
+  const [homePage, services, teamMembers, posts, settings, testimonials] = await Promise.all([
     getPage('home').catch(() => null),
     getServices().catch(() => []),
     getTeamMembers().catch(() => []),
     getPosts(1, 3).catch(() => []),
     getSiteSettings().catch(() => null),
+    getTestimonials().catch(() => []),
   ]);
+
+  const typedSettings = settings as SiteSettings | null;
 
   return (
     <main>
-      <HeroSection page={homePage as Page | null} />
+      {typedSettings && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema(typedSettings)) }}
+        />
+      )}
+      <HeroSection page={homePage as Page | null} settings={typedSettings} />
       <ServicesSection services={services as Service[]} />
-      <AboutSection settings={settings as SiteSettings | null} />
+      <AboutSection settings={typedSettings} />
       <TeamSection members={teamMembers as TeamMember[]} />
+      <TestimonialsSection testimonials={testimonials as Testimonial[]} />
       <BlogSection posts={posts as Post[]} />
 
       <section className="py-24 px-4 bg-slate-50">
@@ -33,7 +45,7 @@ export default async function HomePage() {
             title="İletişim"
             subtitle="Projeniz için ücretsiz danışmanlık alın."
           />
-          <ContactForm />
+          <ContactForm settings={typedSettings} />
         </div>
       </section>
     </main>
