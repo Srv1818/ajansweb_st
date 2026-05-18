@@ -9,11 +9,7 @@ export default function ServicesSection({ services }: { services: Service[] }) {
   return (
     <section className="py-24 px-4 bg-slate-950">
       <div className="max-w-7xl mx-auto">
-        <SectionHeader
-          title="Hizmetlerimiz"
-          subtitle="İşletmenizi bir üst seviyeye taşıyacak kapsamlı dijital çözümler sunuyoruz."
-          light
-        />
+        <SectionHeader title="Hizmetlerimiz" light />
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.slice(0, 6).map((service) => (
             <ServiceCard key={service.id} service={service} />

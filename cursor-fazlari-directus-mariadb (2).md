@@ -247,6 +247,50 @@ Settings → Access Tokens → Create Token → "frontend-token" → Full Access
 Settings → Roles → Public → şu koleksiyonlara read izni ver:
 - pages, posts, services, team_members, site_settings
 
+### Kısıtlı Müşteri Rolü oluştur
+Müşteriye tam admin erişimi verme. Sadece içerik düzenleyebilen bir rol:
+
+1. Settings → Roles → Create Role → "İçerik Editörü"
+2. Bu role şu izinleri ver:
+   - **pages**: create, read, update (delete yok)
+   - **posts**: create, read, update, delete
+   - **services**: create, read, update (delete yok)
+   - **team_members**: create, read, update (delete yok)
+   - **site_settings**: read, update (create/delete yok)
+   - **directus_files**: create, read, update, delete (resim yükleyebilsin)
+3. Settings → **Admin Access: KAPALI** (sistem ayarlarına giremesin)
+4. Settings → Users → Create User → müşteri emaili → Role: İçerik Editörü
+5. Müşteriye Directus URL + email + şifre ilet
+
+### Test İçeriği Gir (Site boş görünmesin)
+Koleksiyonları doldur:
+
+**Site Settings (singleton):**
+- site_name: Ajans Adı
+- contact_email: info@ajans.com
+- phone: +90 212 000 00 00
+- address: İstanbul, Türkiye
+- footer_text: © 2026 Ajans. Tüm hakları saklıdır.
+
+**Pages — slug: "home":**
+- title: Ana Sayfa
+- status: published
+- hero_heading: Dijital Dünyada Farkınızı Yaratın
+- hero_subheading: Markanızı büyütmek için stratejik dijital pazarlama çözümleri.
+- hero_cta_text: Hizmetlerimizi Keşfedin
+- hero_cta_link: /hizmetler
+
+**Services (en az 3 tane, status: published):**
+- SEO & İçerik Pazarlaması / slug: seo / icon: search / short_description: Google'da üst sıralara taşıyoruz.
+- Sosyal Medya Yönetimi / slug: sosyal-medya / icon: share-2 / short_description: Markanızı sosyal medyada büyütüyoruz.
+- Web Tasarım & Geliştirme / slug: web-tasarim / icon: monitor / short_description: Dönüşüm odaklı web siteleri.
+
+**Posts (en az 2 tane, status: published):**
+- Başlık, excerpt, date_published doldur
+
+**Team Members (en az 2 kişi, status: active):**
+- name, job_title, bio doldur
+
 ---
 
 ## FAZ 3 — Next.js Sayfaları (SSG + ISR)
@@ -508,10 +552,23 @@ YAPILACAKLAR:
    - Header hamburger menu (shadcn Sheet)
    - Grid: mobile 1 kolon, tablet 2, desktop 3
 
+7. Tasarımı canlı ve çarpıcı hale getir — sönük görünmesin:
+   - Hero section: koyu arka plan (#0f172a veya deep indigo), üzerinde beyaz/açık metin,
+     büyük bold başlık (text-5xl md:text-7xl), gradient text efekti (bg-clip-text)
+   - Renk aksanları: primary color ile glow/shadow efektleri (box-shadow, drop-shadow)
+   - Butonlar: gradient background, hover'da scale-105 + brightness artışı
+   - Section geçişleri: hafif gradient veya diagonal clip-path ile bölümler birbirinden ayrılsın
+   - Kartlar: border + subtle shadow, hover'da translateY(-4px) + shadow büyümesi (transition)
+   - Sayaçlar (150+ Proje, 98% Memnuniyet): büyük bold rakamlar, primary color ile
+   - Footer: koyu (#0f172a), logo + nav linkleri + sosyal ikonlar + copyright
+   - Animasyonlar: Tailwind animate-fade-in, scroll görünürlüğünde opacity geçişi
+   - Font: Geist veya Inter, başlıklar 700-800 weight, body 400-500
+
 ÇIKTI:
 - primary_color değişince tüm site rengi değişiyor
 - Tüm sayfalar mobile'da düzgün
 - Komponentler Directus verisiyle çalışıyor
+- Site canlı, modern ve profesyonel görünüyor
 ```
 
 ---
@@ -701,7 +758,7 @@ YAPILACAKLAR:
 | Faz | Cursor | Sen |
 |-----|--------|-----|
 | 1 — İskelet ✅ | Next.js scaffold, Dockerfile | GitHub repo, Hetzner, Coolify, MariaDB, Directus |
-| 2 — SDK + Types | Directus SDK kurulum, helper fonksiyonlar, TypeScript types | Directus admin'de koleksiyonları oluştur, API token al |
+| 2 — SDK + Types | Directus SDK kurulum, helper fonksiyonlar, TypeScript types | Directus admin'de koleksiyonları oluştur, API token al, müşteri rolü oluştur, test içeriği gir |
 | 3 — Sayfalar | Next.js SSG/ISR sayfaları, API route | İletişim formunu test et |
 | 4 — Medya | next.config.ts güncelle | R2 bucket, API token, Coolify env |
 | 5 — SEO | Sitemap, OG, JSON-LD | — |

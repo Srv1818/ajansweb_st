@@ -1,3 +1,11 @@
+export interface DirectusFile {
+  id: string;
+  filename_download: string;
+  width?: number;
+  height?: number;
+  type: string;
+}
+
 export interface SocialLink {
   platform: 'instagram' | 'linkedin' | 'twitter' | 'facebook' | 'youtube';
   url: string;
