@@ -8,10 +8,7 @@ export default function TeamSection({ members }: { members: TeamMember[] }) {
   return (
     <section className="py-24 px-4 bg-slate-50">
       <div className="max-w-7xl mx-auto">
-        <SectionHeader
-          title="Ekibimiz"
-          subtitle="Deneyimli ve tutkulu ekibimizle işletmeniz için en iyi sonuçları elde ediyoruz."
-        />
+        <SectionHeader title="Ekibimiz" />
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {members.map((member) => (
             <TeamCard key={member.id} member={member} />

@@ -24,6 +24,22 @@ export function getAssetUrl(fileId: string | null | undefined): string {
   return `${publicUrl}/assets/${fileId}`;
 }
 
+// Image transform destekli URL — Directus'un yerleşik transform API'sini kullanır
+export function getDirectusImageUrl(
+  fileId: string | null | undefined,
+  params?: { width?: number; height?: number; quality?: number; format?: string }
+): string {
+  if (!fileId) return '';
+  const base = getAssetUrl(fileId);
+  if (!params) return base;
+  const p = new URLSearchParams();
+  if (params.width) p.set('width', String(params.width));
+  if (params.height) p.set('height', String(params.height));
+  if (params.quality) p.set('quality', String(params.quality));
+  if (params.format) p.set('format', params.format);
+  return `${base}?${p.toString()}`;
+}
+
 // Koleksiyon okuma — published filtresi + özel query desteği
 export async function getItems<T>(
   collection: string,
@@ -56,10 +72,10 @@ export async function getSingleton<T>(collection: string): Promise<T> {
 // --- Hazır helper'lar ---
 
 export const getPages = (query?: object) =>
-  getItems('pages', { sort: ['-date_created'], ...query });
+  getItems('Page', { sort: ['-date_created'], ...query });
 
 export const getPage = (slug: string) =>
-  getItems('pages', {
+  getItems('Page', {
     filter: { slug: { _eq: slug }, status: { _eq: 'published' } },
     limit: 1,
   }).then((items) => (items as any[])[0] ?? null);
@@ -87,9 +103,10 @@ export const getService = (slug: string) =>
   }).then((items) => (items as any[])[0] ?? null);
 
 export const getTeamMembers = () =>
-  getItems('team_members', {
-    filter: { is_active: { _eq: true }, status: { _eq: 'published' } },
+  getItems<any>('team_members_', {
     sort: ['sort', 'id'],
-  });
+  }).then((members) =>
+    members.map((m) => ({ ...m, name: m.name_Required ?? m.name ?? '' }))
+  );
 
 export const getSiteSettings = () => getSingleton('site_settings');
