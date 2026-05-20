@@ -243,13 +243,23 @@ export default async function KartvizitPage({ params }: { params: Promise<{ slug
           )}
 
           {/* FOOTER */}
-          {s?.site_name && (
-            <p className={`text-center text-xs pb-6 ${mutedCls(isDark)}`}>
-              Bu dijital kartvizit{' '}
-              <span className="font-medium">{s.site_name}</span>{' '}
-              tarafından oluşturulmuştur.
-            </p>
-          )}
+          <div className={`text-center text-xs pb-6 space-y-2 ${mutedCls(isDark)}`}>
+            {s?.site_name && (
+              <p>
+                Bu dijital kartvizit{' '}
+                <span className="font-medium">{s.site_name}</span>{' '}
+                tarafından oluşturulmuştur.
+              </p>
+            )}
+            <div className="flex gap-4 justify-center">
+              <a href="/gizlilik-politikasi" className="underline hover:text-foreground">
+                Gizlilik Politikası
+              </a>
+              <a href="/kullanim-kosullari" className="underline hover:text-foreground">
+                Kullanım Koşulları
+              </a>
+            </div>
+          </div>
 
         </div>
       </div>

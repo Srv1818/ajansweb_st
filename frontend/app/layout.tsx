@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
 import { Geist } from 'next/font/google';
 import './globals.css';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import { getSiteSettings } from '@/lib/directus';
 import type { SiteSettings } from '@/types/directus';
 
@@ -24,9 +22,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         className="min-h-full flex flex-col"
         style={{ '--site-primary': primaryColor } as React.CSSProperties}
       >
-        <Header settings={settings} />
-        <div className="flex-1">{children}</div>
-        <Footer settings={settings} />
+        {children}
       </body>
     </html>
   );
