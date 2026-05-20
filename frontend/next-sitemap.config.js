@@ -9,7 +9,7 @@ module.exports = {
     if (!base || !token) return [];
 
     try {
-      const [postsRes, servicesRes] = await Promise.all([
+      const [postsRes, servicesRes, membersRes] = await Promise.all([
         fetch(
           `${base}/items/posts?fields=slug&filter[status][_eq]=published&limit=-1`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -18,13 +18,19 @@ module.exports = {
           `${base}/items/services?fields=slug&filter[status][_eq]=published`,
           { headers: { Authorization: `Bearer ${token}` } }
         ),
+        fetch(
+          `${base}/items/team_members_?fields=slug&filter[status][_eq]=active&limit=-1`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        ),
       ]);
       const posts = await postsRes.json();
       const services = await servicesRes.json();
+      const members = await membersRes.json();
 
       return [
         ...(posts.data ?? []).map((p) => ({ loc: `/blog/${p.slug}` })),
         ...(services.data ?? []).map((s) => ({ loc: `/hizmetler/${s.slug}` })),
+        ...(members.data ?? []).filter((m) => m.slug).map((m) => ({ loc: `/kartvizit/${m.slug}`, priority: 0.7 })),
       ];
     } catch {
       return [];

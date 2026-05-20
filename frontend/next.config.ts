@@ -5,6 +5,7 @@ const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL ?? DIRECTUS_URL;
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  allowedDevOrigins: ['192.168.1.5'],
 
   images: {
     remotePatterns: [
@@ -19,6 +20,17 @@ const nextConfig: NextConfig = {
       },
     ],
     formats: ['image/avif', 'image/webp'],
+  },
+
+  async redirects() {
+    if (process.env.CARD_ONLY !== 'true') return []
+    return [
+      {
+        source: '/',
+        destination: '/kartvizit',
+        permanent: false,
+      },
+    ]
   },
 
   async headers() {
