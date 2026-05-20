@@ -95,7 +95,12 @@ export interface TeamMemberItem extends TeamMember {
   address?: string;
   maps_url?: string;
   services_list?: Array<{ title: string; description?: string }>;
-  social_links?: Array<{ platform: string; url: string }>;
+  instagram_url?: string;
+  linkedin_url?: string;
+  twitter_url?: string;
+  facebook_url?: string;
+  youtube_url?: string;
+  tiktok_url?: string;
   company_description?: string;
   card_theme?: 'default' | 'dark' | 'minimal';
   cover_image?: string | DirectusFile;
