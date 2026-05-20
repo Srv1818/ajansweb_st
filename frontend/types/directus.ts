@@ -87,6 +87,20 @@ export interface TeamMember {
   status: 'published' | 'draft';
 }
 
+export interface TeamMemberItem extends TeamMember {
+  name_Required?: string;
+  slug?: string;
+  phone?: string;
+  whatsapp?: string;
+  address?: string;
+  maps_url?: string;
+  services_list?: Array<{ title: string; description?: string }>;
+  social_links?: Array<{ platform: string; url: string }>;
+  company_description?: string;
+  card_theme?: 'default' | 'dark' | 'minimal';
+  cover_image?: string | DirectusFile;
+}
+
 export interface Testimonial {
   id: string;
   name: string;

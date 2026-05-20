@@ -30,7 +30,8 @@
       "Bash(npm install *)",
       "Bash(node -e \"const t=require\\('./tsconfig.json'\\); console.log\\(JSON.stringify\\(t.exclude\\)\\)\")",
       "Bash(node -e \"require\\('resend'\\)\")",
-      "Bash(Remove-Item *)"
+      "Bash(Remove-Item *)",
+      "Bash(node *)"
     ]
   }
 }
