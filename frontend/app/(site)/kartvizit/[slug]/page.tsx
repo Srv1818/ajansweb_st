@@ -279,28 +279,41 @@ export default async function KartvizitPage({ params }: { params: Promise<{ slug
           )}
 
           {/* SOSYAL MEDYA */}
-          {member.social_links && member.social_links.length > 0 && (
-            <div className={`${p.cardBg} ${p.cardBorder} rounded-2xl shadow-md border p-5`}>
-              <h2 className={`text-xs font-bold ${p.textMuted} uppercase tracking-widest mb-3`}>
-                Sosyal Medya
-              </h2>
-              <div className="flex gap-3 justify-center flex-wrap">
-                {member.social_links.map((link, i) => (
-                  <a
-                    key={i}
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={`flex items-center gap-2 px-4 py-2 ${p.socialBg} rounded-full ${p.socialBorder} border transition-colors text-sm font-semibold ${p.btnText}`}
-                    aria-label={link.platform}
-                  >
-                    <ExternalLink className="w-4 h-4" />
-                    <span className="capitalize">{link.platform}</span>
-                  </a>
-                ))}
+          {(() => {
+            const socialLinks = [
+              { url: member.instagram_url, label: 'Instagram' },
+              { url: member.linkedin_url,  label: 'LinkedIn'  },
+              { url: member.twitter_url,   label: 'Twitter'   },
+              { url: member.facebook_url,  label: 'Facebook'  },
+              { url: member.youtube_url,   label: 'YouTube'   },
+              { url: member.tiktok_url,    label: 'TikTok'    },
+            ].filter((l): l is { url: string; label: string } => !!l.url)
+
+            if (socialLinks.length === 0) return null
+
+            return (
+              <div className={`${p.cardBg} ${p.cardBorder} rounded-2xl shadow-md border p-5`}>
+                <h2 className={`text-xs font-bold ${p.textMuted} uppercase tracking-widest mb-3`}>
+                  Sosyal Medya
+                </h2>
+                <div className="flex gap-3 justify-center flex-wrap">
+                  {socialLinks.map((link, i) => (
+                    <a
+                      key={i}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={`flex items-center gap-2 px-4 py-2 ${p.socialBg} rounded-full ${p.socialBorder} border transition-colors text-sm font-semibold ${p.btnText}`}
+                      aria-label={link.label}
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      <span>{link.label}</span>
+                    </a>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )
+          })()}
 
           {/* FOOTER */}
           <div className={`text-center text-xs ${p.footerText} pb-6 space-y-2`}>
