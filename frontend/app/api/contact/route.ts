@@ -10,13 +10,20 @@ const schema = z.object({
   website: z.string().optional(), // honeypot
 });
 
-const rateMap = new Map<string, { count: number; resetAt: number }>();
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of rateLimitMap.entries()) {
+    if (value.resetAt < now) rateLimitMap.delete(key);
+  }
+}, 10 * 60 * 1000);
 
 function checkRateLimit(ip: string): boolean {
   const now = Date.now();
-  const entry = rateMap.get(ip);
+  const entry = rateLimitMap.get(ip);
   if (!entry || now > entry.resetAt) {
-    rateMap.set(ip, { count: 1, resetAt: now + 3600_000 });
+    rateLimitMap.set(ip, { count: 1, resetAt: now + 3600_000 });
     return true;
   }
   if (entry.count >= 3) return false;
@@ -24,13 +31,33 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
-  const ip = 
-  req.headers.get('cf-connecting-ip') ?? 
-  req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 
-  'unknown';
+  const fromEmail = process.env.RESEND_FROM_EMAIL;
+  const contactEmail = process.env.CONTACT_EMAIL;
+
+  if (!fromEmail || !contactEmail) {
+    console.error('RESEND_FROM_EMAIL veya CONTACT_EMAIL env eksik');
+    return NextResponse.json(
+      { error: 'Sunucu yapılandırma hatası' },
+      { status: 500 }
+    );
+  }
+
+  const ip =
+    req.headers.get('cf-connecting-ip') ??
+    req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ??
+    'unknown';
 
   if (!checkRateLimit(ip)) {
     return NextResponse.json(
@@ -55,27 +82,18 @@ export async function POST(req: NextRequest) {
   }
 
   const { name, email, phone, message } = result.data;
-  const sanitizedMessage = message.replace(/<[^>]*>/g, '').trim();
-
-  const contactEmail = process.env.CONTACT_EMAIL;
-  if (!contactEmail) {
-    return NextResponse.json(
-      { error: 'Sunucu yapılandırma hatası' },
-      { status: 500 }
-    );
-  }
 
   try {
     await resend.emails.send({
-      from: 'onboarding@resend.dev',
+      from: fromEmail,
       to: contactEmail,
-      subject: `Yeni İletişim Formu — ${name}`,
+      subject: `Yeni İletişim Formu — ${escapeHtml(name)}`,
       html: `
-        <p><strong>Ad Soyad:</strong> ${name}</p>
-        <p><strong>E-posta:</strong> ${email}</p>
-        ${phone ? `<p><strong>Telefon:</strong> ${phone}</p>` : ''}
+        <p><strong>Ad Soyad:</strong> ${escapeHtml(name)}</p>
+        <p><strong>E-posta:</strong> ${escapeHtml(email)}</p>
+        ${phone ? `<p><strong>Telefon:</strong> ${escapeHtml(phone)}</p>` : ''}
         <p><strong>Mesaj:</strong></p>
-        <p>${sanitizedMessage.replace(/\n/g, '<br>')}</p>
+        <p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>
       `,
     });
   } catch {
