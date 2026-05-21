@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { getServices, getService } from '@/lib/directus';
 import { serviceSchema } from '@/lib/structured-data';
 import type { Service } from '@/types/directus';
@@ -43,7 +43,7 @@ export default async function HizmetDetayPage({ params }: { params: Promise<{ sl
       {service.content && (
         <div
           className="prose prose-gray max-w-none"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(service.content ?? '') }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(service.content ?? '') }}
         />
       )}
     </main>

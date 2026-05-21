@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitizeHtml } from '@/lib/sanitize';
 import { getPosts, getPost, getAssetUrl } from '@/lib/directus';
 import { articleSchema } from '@/lib/structured-data';
 import type { Post } from '@/types/directus';
@@ -62,7 +62,7 @@ export default async function BlogDetayPage({ params }: { params: Promise<{ slug
       {post.content && (
         <div
           className="prose prose-gray max-w-none"
-          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(post.content ?? '') }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content ?? '') }}
         />
       )}
     </main>
