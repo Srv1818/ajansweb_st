@@ -34,11 +34,16 @@ export default async function BlogDetayPage({ params }: { params: Promise<{ slug
 
   if (!post) notFound();
 
+  const safeJson = JSON.stringify(articleSchema(post))
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema(post)) }}
+        dangerouslySetInnerHTML={{ __html: safeJson }}
       />
       {post.featured_image && (
         <div className="aspect-video rounded-xl overflow-hidden mb-8">
