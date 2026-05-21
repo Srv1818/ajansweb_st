@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { sanitizeHtml } from '@/lib/sanitize';
+import { sanitizeContent } from '@/lib/sanitize';
 import { getPosts, getPost, getAssetUrl } from '@/lib/directus';
 import { articleSchema } from '@/lib/structured-data';
 import type { Post } from '@/types/directus';
@@ -34,11 +34,16 @@ export default async function BlogDetayPage({ params }: { params: Promise<{ slug
 
   if (!post) notFound();
 
+  const safeJson = JSON.stringify(articleSchema(post))
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema(post)) }}
+        dangerouslySetInnerHTML={{ __html: safeJson }}
       />
       {post.featured_image && (
         <div className="aspect-video rounded-xl overflow-hidden mb-8">
@@ -62,7 +67,7 @@ export default async function BlogDetayPage({ params }: { params: Promise<{ slug
       {post.content && (
         <div
           className="prose prose-gray max-w-none"
-          dangerouslySetInnerHTML={{ __html: sanitizeHtml(post.content ?? '') }}
+          dangerouslySetInnerHTML={{ __html: sanitizeContent(post.content ?? '') }}
         />
       )}
     </main>

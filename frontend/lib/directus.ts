@@ -12,10 +12,13 @@ import {
 // İstemci/browser NEXT_PUBLIC_ URL'i kullanır
 const DIRECTUS_URL =
   process.env.DIRECTUS_INTERNAL_URL ?? process.env.NEXT_PUBLIC_DIRECTUS_URL!;
-const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN!;
+const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN
+if (typeof window === 'undefined' && !DIRECTUS_TOKEN) {
+  throw new Error('DIRECTUS_TOKEN environment variable is required')
+}
 
 export const directus = createDirectus(DIRECTUS_URL)
-  .with(staticToken(DIRECTUS_TOKEN))
+  .with(staticToken(DIRECTUS_TOKEN ?? ''))
   .with(rest());
 
 // Directus dosya/medya URL'i — file ID'den tam URL üretir

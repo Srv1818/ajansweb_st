@@ -23,13 +23,19 @@ export default async function HomePage() {
   ]);
 
   const typedSettings = settings as SiteSettings | null;
+  const safeJson = typedSettings
+    ? JSON.stringify(organizationSchema(typedSettings))
+        .replace(/</g, '\\u003c')
+        .replace(/>/g, '\\u003e')
+        .replace(/&/g, '\\u0026')
+    : null
 
   return (
     <main>
-      {typedSettings && (
+      {safeJson && (
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema(typedSettings)) }}
+          dangerouslySetInnerHTML={{ __html: safeJson }}
         />
       )}
       <HeroSection page={homePage as Page | null} settings={typedSettings} />

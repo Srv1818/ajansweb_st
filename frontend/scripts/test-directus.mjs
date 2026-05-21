@@ -36,7 +36,7 @@ if (!BASE_URL || !TOKEN) {
 }
 
 console.log('URL :', BASE_URL);
-console.log('Token:', TOKEN.slice(0, 8) + '...');
+console.log('Token: [REDACTED]');
 console.log();
 
 async function req(path) {
