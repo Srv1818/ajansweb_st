@@ -58,9 +58,12 @@ export async function POST(req: NextRequest) {
   const sanitizedMessage = message.replace(/<[^>]*>/g, '').trim();
 
   const contactEmail = process.env.CONTACT_EMAIL;
-if (!contactEmail) {
-  return NextResponse.json({ error: 'Sunucu yapılandırma hatası' }, { status: 500 });
-}
+  if (!contactEmail) {
+    return NextResponse.json(
+      { error: 'Sunucu yapılandırma hatası' },
+      { status: 500 }
+    );
+  }
 
   try {
     await resend.emails.send({
