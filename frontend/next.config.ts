@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 
 const DIRECTUS_URL = process.env.NEXT_PUBLIC_DIRECTUS_URL ?? '';
 const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL ?? DIRECTUS_URL;
+const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
   output: 'standalone',
@@ -49,11 +50,12 @@ const nextConfig: NextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
-              "style-src 'self' 'unsafe-inline'",
+              isDev ? "script-src 'self' 'unsafe-inline' 'unsafe-eval'" : "script-src 'self'",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               `img-src 'self' data: blob: ${DIRECTUS_URL} ${CDN_URL}`,
               "font-src 'self' https://fonts.gstatic.com",
               "connect-src 'self' https://api.resend.com",
+              "frame-ancestors 'none'",
             ].join('; '),
           },
         ],
