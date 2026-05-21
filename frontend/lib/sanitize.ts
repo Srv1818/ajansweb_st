@@ -1,10 +1,15 @@
-export function sanitizeHtml(html: string): string {
-  if (!html) return ''
-  return html
-    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
-    .replace(/\bon\w+\s*=\s*["'][^"']*["']/gi, '')
-    .replace(/javascript:/gi, '')
-    .replace(/<object\b[^>]*>/gi, '')
-    .replace(/<embed\b[^>]*>/gi, '')
+import sanitizeHtml from 'sanitize-html';
+
+export function sanitizeContent(html: string): string {
+  return sanitizeHtml(html, {
+    allowedTags: sanitizeHtml.defaults.allowedTags,
+    allowedAttributes: sanitizeHtml.defaults.allowedAttributes,
+  });
+}
+
+export function sanitizeText(text: string): string {
+  return sanitizeHtml(text, {
+    allowedTags: [],
+    allowedAttributes: {},
+  });
 }

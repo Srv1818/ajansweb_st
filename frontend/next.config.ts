@@ -5,8 +5,6 @@ const CDN_URL = process.env.NEXT_PUBLIC_CDN_URL ?? DIRECTUS_URL;
 const isDev = process.env.NODE_ENV === 'development';
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ['192.168.1.5'],
-
   images: {
     remotePatterns: [
       {
