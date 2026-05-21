@@ -1,3 +1,4 @@
+import DOMPurify from 'isomorphic-dompurify';
 import { getPage } from '@/lib/directus';
 import type { Page } from '@/types/directus';
 import type { Metadata } from 'next';
@@ -37,7 +38,7 @@ export default async function GizlilikPolitikasiPage() {
       </h1>
       <div
         className="prose prose-slate max-w-none"
-        dangerouslySetInnerHTML={{ __html: content }}
+        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content ?? '') }}
       />
     </main>
   );
