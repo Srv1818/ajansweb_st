@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { Resend } from 'resend';
+import { sanitizeText } from '@/lib/sanitize';
 
 const schema = z.object({
   name: z.string().min(2).max(100),
@@ -29,15 +30,6 @@ function checkRateLimit(ip: string): boolean {
   if (entry.count >= 3) return false;
   entry.count++;
   return true;
-}
-
-function escapeHtml(str: string): string {
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
@@ -81,19 +73,22 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ ok: true });
   }
 
-  const { name, email, phone, message } = result.data;
+  const name = sanitizeText(result.data.name);
+  const email = sanitizeText(result.data.email);
+  const phone = result.data.phone ? sanitizeText(result.data.phone) : undefined;
+  const message = sanitizeText(result.data.message);
 
   try {
     await resend.emails.send({
       from: fromEmail,
       to: contactEmail,
-      subject: `Yeni İletişim Formu — ${escapeHtml(name)}`,
+      subject: `Yeni İletişim Formu — ${name}`,
       html: `
-        <p><strong>Ad Soyad:</strong> ${escapeHtml(name)}</p>
-        <p><strong>E-posta:</strong> ${escapeHtml(email)}</p>
-        ${phone ? `<p><strong>Telefon:</strong> ${escapeHtml(phone)}</p>` : ''}
+        <p><strong>Ad Soyad:</strong> ${name}</p>
+        <p><strong>E-posta:</strong> ${email}</p>
+        ${phone ? `<p><strong>Telefon:</strong> ${phone}</p>` : ''}
         <p><strong>Mesaj:</strong></p>
-        <p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>
+        <p>${message.replace(/\n/g, '<br>')}</p>
       `,
     });
   } catch {

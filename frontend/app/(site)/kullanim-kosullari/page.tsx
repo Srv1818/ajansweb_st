@@ -1,4 +1,4 @@
-import { sanitizeHtml } from '@/lib/sanitize';
+import { sanitizeContent } from '@/lib/sanitize';
 import { getPage } from '@/lib/directus';
 import type { Page } from '@/types/directus';
 import type { Metadata } from 'next';
@@ -41,7 +41,7 @@ export default async function KullanimKosullariPage() {
       </h1>
       <div
         className="prose prose-slate max-w-none"
-        dangerouslySetInnerHTML={{ __html: sanitizeHtml(content ?? '') }}
+        dangerouslySetInnerHTML={{ __html: sanitizeContent(content ?? '') }}
       />
     </main>
   );
