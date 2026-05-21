@@ -27,7 +27,10 @@ function checkRateLimit(ip: string): boolean {
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
-  const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 'unknown';
+  const ip = 
+  req.headers.get('cf-connecting-ip') ?? 
+  req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ?? 
+  'unknown';
 
   if (!checkRateLimit(ip)) {
     return NextResponse.json(
@@ -54,10 +57,15 @@ export async function POST(req: NextRequest) {
   const { name, email, phone, message } = result.data;
   const sanitizedMessage = message.replace(/<[^>]*>/g, '').trim();
 
+  const contactEmail = process.env.CONTACT_EMAIL;
+if (!contactEmail) {
+  return NextResponse.json({ error: 'Sunucu yapılandırma hatası' }, { status: 500 });
+}
+
   try {
     await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: process.env.CONTACT_EMAIL ?? 'admin@musteri-a.com',
+      to: contactEmail,
       subject: `Yeni İletişim Formu — ${name}`,
       html: `
         <p><strong>Ad Soyad:</strong> ${name}</p>

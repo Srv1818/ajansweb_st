@@ -37,3 +37,10 @@ export function serviceSchema(service: Service) {
     url: `${siteUrl}/hizmetler/${service.slug}`,
   };
 }
+
+export function safeJsonLd(schema: object): string {
+  return JSON.stringify(schema)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026');
+}

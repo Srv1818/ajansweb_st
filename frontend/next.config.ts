@@ -10,8 +10,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
-        hostname: 'directus-qbe5j85rsml2s833p4c8cm71.178.105.106.91.sslip.io',
+        protocol: 'https',
+        hostname: DIRECTUS_URL ? new URL(DIRECTUS_URL).hostname : 'localhost',
       },
       {
         protocol: 'http',
