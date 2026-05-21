@@ -12,7 +12,8 @@
       "Bash(npm uninstall *)",
       "Bash(git pull *)",
       "Bash(git add *)",
-      "Bash(git rebase *)"
+      "Bash(git rebase *)",
+      "Bash(git push *)"
     ]
   }
 }
