@@ -1,3 +1,5 @@
+// Next.js middleware
+// NOT: Next.js 16'da bu dosya proxy.ts olarak rename edilmesi gerekebilir.
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 

@@ -5,7 +5,7 @@ const envSchema = z.object({
   DIRECTUS_INTERNAL_URL: z.string().url().optional(),
   DIRECTUS_TOKEN: z.string().min(10),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
-  RESEND_API_KEY: z.string().startsWith('re_'),
+  RESEND_API_KEY: z.string().startsWith('re_').optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);
