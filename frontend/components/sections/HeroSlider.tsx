@@ -3,14 +3,16 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 
+const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH ?? '';
+
 const SLIDES = [
-  '/image/hero/hero-1.jpg',
-  '/image/hero/hero-2.jpg',
-  '/image/hero/hero-3.jpg',
-  '/image/hero/hero-4.jpg',
-  '/image/hero/hero-5.jpg',
-  '/image/hero/hero-6.jpg',
-  '/image/hero/hero-7.jpg',
+  `${BASE_PATH}/image/hero/hero-1.jpg`,
+  `${BASE_PATH}/image/hero/hero-2.jpg`,
+  `${BASE_PATH}/image/hero/hero-3.jpg`,
+  `${BASE_PATH}/image/hero/hero-4.jpg`,
+  `${BASE_PATH}/image/hero/hero-5.jpg`,
+  `${BASE_PATH}/image/hero/hero-6.jpg`,
+  `${BASE_PATH}/image/hero/hero-7.jpg`,
 ];
 
 export default function HeroSlider() {
