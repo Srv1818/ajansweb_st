@@ -27,9 +27,10 @@ export default function ContactForm({ settings }: { settings?: SiteSettings | nu
   } = useForm<FormValues>({ resolver: zodResolver(schema) });
 
   const onSubmit = async (data: FormValues) => {
-    const res = await fetch('/api/contact', {
+    const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT ?? 'https://formspree.io/f/REPLACE_WITH_YOUR_ID';
+    const res = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
       body: JSON.stringify(data),
     });
     if (res.ok) {
