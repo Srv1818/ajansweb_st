@@ -11,7 +11,7 @@ import {
 // Sunucu tarafı Coolify iç ağını kullanır → hızlı, dış internete çıkmaz
 // İstemci/browser NEXT_PUBLIC_ URL'i kullanır
 const DIRECTUS_URL =
-  process.env.DIRECTUS_INTERNAL_URL ?? process.env.NEXT_PUBLIC_DIRECTUS_URL!;
+  process.env.DIRECTUS_INTERNAL_URL ?? process.env.NEXT_PUBLIC_DIRECTUS_URL ?? 'http://localhost:8055';
 const DIRECTUS_TOKEN = process.env.DIRECTUS_TOKEN ?? ''
 
 export const directus = createDirectus(DIRECTUS_URL)
