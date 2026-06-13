@@ -4,7 +4,8 @@ import { getService } from '@/lib/directus';
 import { serviceSchema } from '@/lib/structured-data';
 import type { Service } from '@/types/directus';
 
-export const revalidate = 300;
+export const revalidate = 0;
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   return [];

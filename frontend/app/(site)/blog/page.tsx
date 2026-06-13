@@ -4,19 +4,12 @@ import { getPosts } from '@/lib/directus';
 import { getAssetUrl } from '@/lib/directus';
 import type { Post } from '@/types/directus';
 
-export const revalidate = 60;
-
 export const metadata = {
   title: 'Blog',
 };
 
-export default async function BlogPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ page?: string }>;
-}) {
-  const { page: pageParam } = await searchParams;
-  const page = Math.max(1, parseInt(pageParam ?? '1', 10));
+export default async function BlogPage() {
+  const page = 1;
   const pageSize = 9;
 
   const posts = (await getPosts(page, pageSize).catch(() => [])) as Post[];

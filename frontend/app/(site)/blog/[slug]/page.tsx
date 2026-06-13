@@ -5,7 +5,8 @@ import { getPost, getAssetUrl } from '@/lib/directus';
 import { articleSchema } from '@/lib/structured-data';
 import type { Post } from '@/types/directus';
 
-export const revalidate = 300;
+export const revalidate = 0;
+export const dynamicParams = false;
 
 export async function generateStaticParams() {
   return [];
