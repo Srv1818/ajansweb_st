@@ -1,6 +1,4 @@
-export async function generateStaticParams() { return []; }
-
-import { getItems, getDirectusImageUrl, getSiteSettings } from '@/lib/directus'
+import { getDirectusImageUrl, getSiteSettings } from '@/lib/directus'
 import type { TeamMemberItem, SiteSettings, DirectusFile } from '@/types/directus'
 import { notFound } from 'next/navigation'
 import {
@@ -23,12 +21,7 @@ function getFileId(field: string | DirectusFile | null | undefined): string | nu
 }
 
 export async function generateStaticParams() {
-  const members = await getItems<TeamMemberItem>('team_members_', {
-    fields: ['slug'],
-  }).catch(() => [] as TeamMemberItem[])
-  return members
-    .filter((m) => m.slug)
-    .map((m) => ({ slug: m.slug! }))
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

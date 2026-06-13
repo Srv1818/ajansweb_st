@@ -1,20 +1,13 @@
-export async function generateStaticParams() { return []; }
-
 import { notFound } from 'next/navigation';
 import { sanitizeContent } from '@/lib/sanitize';
-import { getServices, getService } from '@/lib/directus';
+import { getService } from '@/lib/directus';
 import { serviceSchema } from '@/lib/structured-data';
 import type { Service } from '@/types/directus';
 
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  try {
-    const services = (await getServices()) as Service[];
-    return services.map((s) => ({ slug: s.slug }));
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {

@@ -1,21 +1,14 @@
-export async function generateStaticParams() { return []; }
-
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { sanitizeContent } from '@/lib/sanitize';
-import { getPosts, getPost, getAssetUrl } from '@/lib/directus';
+import { getPost, getAssetUrl } from '@/lib/directus';
 import { articleSchema } from '@/lib/structured-data';
 import type { Post } from '@/types/directus';
 
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  try {
-    const posts = (await getPosts(1, 100)) as Post[];
-    return posts.map((p) => ({ slug: p.slug }));
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
