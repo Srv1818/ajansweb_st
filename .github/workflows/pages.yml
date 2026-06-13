@@ -33,6 +33,7 @@ jobs:
       - name: Build static site
         working-directory: frontend
         env:
+          PAGES_BASE_PATH: /${{ github.event.repository.name }}
           NEXT_PUBLIC_FORMSPREE_ENDPOINT: ${{ secrets.FORMSPREE_ENDPOINT }}
         run: npm run build
 
