@@ -1,3 +1,5 @@
+export async function generateStaticParams() { return []; }
+
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { sanitizeContent } from '@/lib/sanitize';

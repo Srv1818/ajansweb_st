@@ -1,3 +1,5 @@
+export async function generateStaticParams() { return []; }
+
 import { notFound } from 'next/navigation';
 import { sanitizeContent } from '@/lib/sanitize';
 import { getServices, getService } from '@/lib/directus';

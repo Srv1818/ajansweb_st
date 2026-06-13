@@ -1,3 +1,5 @@
+export async function generateStaticParams() { return []; }
+
 import { getItems, getDirectusImageUrl, getSiteSettings } from '@/lib/directus'
 import type { TeamMemberItem, SiteSettings, DirectusFile } from '@/types/directus'
 import { notFound } from 'next/navigation'
